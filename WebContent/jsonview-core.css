@@ -125,3 +125,7 @@ li {
 	vertical-align: bottom;
 	cursor: pointer;
 }
+
+.marked {
+	border: 1px dotted;
+}

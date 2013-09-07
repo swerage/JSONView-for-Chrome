@@ -87,6 +87,74 @@ function displayUI(theme, html) {
 			path : statusElement.innerText
 		});
 	}, false);
+
+	document.body.addEventListener('keypress', function(e) {
+	    if ( e.ctrlKey && e.which === 31 ) {
+	        var e = new Event('click');
+	        document.querySelectorAll('[title="reduce all"]')[0].dispatchEvent(e);
+	    }
+
+	    if ( e.ctrlKey && e.which === 43 ) {
+	        var e = new Event('click');
+	        document.querySelectorAll('[title="expand all"]')[0].dispatchEvent(e);
+	    }
+	}, false);
+
+	document.body.addEventListener('keydown', function(e) {
+		//38 - up
+		//40 - down
+		//9 - tab
+		//13 - enter
+		
+		if ( e.which === 40 && document.querySelectorAll('.marked').length === 0) {
+			document.querySelectorAll('.obj')[0].children[0].classList.add('marked')
+			return;
+		}
+
+		if ( document.querySelectorAll('.marked').length !== 0 ) {
+			
+			//Down
+			if ( e.which === 40 ) {
+				var marked = document.querySelectorAll('.marked')[0];
+				var siblings = marked.parentNode.children; 
+				var current = Array.prototype.indexOf.call( siblings, marked );
+				var next = siblings[ current + 1 ];
+
+				if ( typeof next !== 'undefined' ) {
+					marked.classList.remove('marked');
+					next.classList.add('marked');
+				}
+			}
+
+			//Up
+			if ( e.which === 38 ) {
+				var marked = document.querySelectorAll('.marked')[0];
+				var siblings = marked.parentNode.children; 
+				var current = Array.prototype.indexOf.call( siblings, marked );
+				var prev = siblings[ current - 1 ];
+
+				if ( typeof prev !== 'undefined' ) {
+					marked.classList.remove('marked');
+					prev.classList.add('marked');
+				}
+			}
+
+			//Enter
+			if ( e.which === 13 ) {
+				var collapsed = document.querySelectorAll('.marked > .collapsed')[0];
+				
+				if ( typeof collapsed === 'undefined' ) {					
+					var collapsible = document.querySelectorAll('.marked > .hoverable > .collapsible')[0]
+					if ( typeof collapsible !== 'undefined' ) {
+						collapsible.parentNode.classList.add('collapsed');
+					}
+					return;
+				}
+
+				collapsed.classList.remove('collapsed');
+			}
+		}
+	});
 }
 
 function extractData(rawText) {
