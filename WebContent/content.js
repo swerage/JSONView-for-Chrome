@@ -116,6 +116,15 @@ function displayUI(theme, html) {
 			//Down
 			if ( e.which === 40 ) {
 				var marked = document.querySelectorAll('.marked')[0];
+				var isCollapsed = document.querySelectorAll('.marked > .hoverable')[0].classList.contains('collapsed'); 
+				var firstChild = document.querySelectorAll('.marked > .hoverable > ul.collapsible > li')[0];
+				
+				if ( !isCollapsed && typeof firstChild !== 'undefined' ) {
+					marked.classList.remove('marked');
+					firstChild.classList.add('marked');
+					return;
+				}
+
 				var siblings = marked.parentNode.children; 
 				var current = Array.prototype.indexOf.call( siblings, marked );
 				var next = siblings[ current + 1 ];
