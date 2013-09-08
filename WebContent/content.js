@@ -102,8 +102,16 @@ function displayUI(theme, html) {
 
 	document.body.addEventListener('keydown', function(e) {
 		
-		if ( e.which === 40 && document.querySelectorAll('.selected').length === 0) {
+		//First down
+		if ( e.which === 40 && document.querySelectorAll('.selected').length === 0 ) {
 			document.querySelectorAll('.obj')[0].children[0].classList.add('selected')
+			return;
+		}
+
+		//First up
+		if ( e.which === 38 && document.querySelectorAll('.selected').length === 0 ) {
+			var root = document.querySelectorAll('.obj')[ 0 ];
+			root.children[ root.children.length - 1 ].classList.add('selected')
 			return;
 		}
 
@@ -135,7 +143,7 @@ function displayUI(theme, html) {
 				var siblings = parent.parentNode.children;
 				var ix = Array.prototype.indexOf.call( siblings, parent );
 
-				if ( ix > -1 && siblings.length > 1 ) {
+				if ( ix > -1 && siblings.length > 1 && ix < siblings.length ) {
 					selected.classList.remove('selected');
 					siblings[ ix + 1 ].classList.add('selected');
 				}
@@ -144,6 +152,10 @@ function displayUI(theme, html) {
 			//Up
 			if ( e.which === 38 ) {
 				var selected = document.querySelectorAll('.selected')[0];
+				if ( typeof selected === 'undefined' ) {
+					return;
+				}
+
 				var siblings = selected.parentNode.children; 
 				var current = Array.prototype.indexOf.call( siblings, selected );
 				var prev = siblings[ current - 1 ];
@@ -184,7 +196,7 @@ function displayUI(theme, html) {
 					}
 					var prop = document.querySelectorAll('.selected > .hoverable > .property')[0];
 
-					if ( prop && prop.innerHTML === 'href' ) {
+					if ( prop && ( prop.innerHTML === 'href' || prop.innerHTML === 'template' || prop.innerHTML === 'url' )) {
 						var anchor = document.querySelectorAll('.selected > .hoverable > a')[0];
 						var linkFiller = document.querySelectorAll('.link-filler')[0]
 
@@ -362,14 +374,14 @@ var onmouseMove = (function() {
 	};
 })();
 
-var selectedLI;
-
 function onmouseClick() {
-	if (selectedLI)
-		selectedLI.firstChild.classList.remove("selected");
-	selectedLI = getParentLI(event.target);
+	Array.prototype.forEach.call(document.querySelectorAll('.selected'), function(selected) { 
+		selected.classList.remove('selected'); 
+	});
+	
+	var selectedLI = getParentLI(event.target);
 	if (selectedLI) {
-		selectedLI.firstChild.classList.add("selected");
+		selectedLI.classList.add("selected");
 	}
 }
 
