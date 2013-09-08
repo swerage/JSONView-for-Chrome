@@ -114,8 +114,8 @@ function displayUI(theme, html) {
 				var selected = document.querySelectorAll('.selected')[0];
 				var isCollapsed = document.querySelectorAll('.selected > .hoverable')[0].classList.contains('collapsed'); 
 				var firstChild = document.querySelectorAll('.selected > .hoverable > ul.collapsible > li')[0];
-				
-				if ( !isCollapsed && typeof firstChild !== 'undefined' ) {
+
+				if ( !isCollapsed && typeof firstChild !== 'undefined' && !e.shiftKey ) {
 					selected.classList.remove('selected');
 					firstChild.classList.add('selected');
 					return;
@@ -151,6 +151,21 @@ function displayUI(theme, html) {
 				if ( typeof prev !== 'undefined' ) {
 					selected.classList.remove('selected');
 					prev.classList.add('selected');
+
+					var prevIsCollapsed = document.querySelectorAll('.selected > .hoverable')[0].classList.contains('collapsed');
+					var prevChildrenContainer = document.querySelectorAll('.selected > .hoverable > .collapsible')[ 0 ];
+					
+					if ( !e.shiftKey && !prevIsCollapsed && typeof prevChildrenContainer !== 'undefined' ) {
+						var nrOfChildren = prevChildrenContainer.children.length;
+						var lastChild = prevChildrenContainer.children[ nrOfChildren - 1 ];
+
+						if ( typeof lastChild !== 'undefined' ) {
+							document.querySelectorAll('.selected')[0].classList.remove('selected');
+							lastChild.classList.add('selected');
+							return;
+						}
+					}
+					
 					return;
 				}
 
