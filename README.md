@@ -1,7 +1,7 @@
 JSONView-for-Chrome with Navigation
 ===================
 
-This is a fork of the Chrome plugin gildas-lormeau/JSONView-for-Chrome. Some navigation features have been added.
+This is a fork of the Chrome plugin [gildas-lormeau/JSONView-for-Chrome](https://www.github.com/gildas-lormeau/JSONView-for-Chrome). Some navigation features have been added.
 
 Shortcuts
 -------------------------
