@@ -101,10 +101,6 @@ function displayUI(theme, html) {
 	}, false);
 
 	document.body.addEventListener('keydown', function(e) {
-		//38 - up
-		//40 - down
-		//9 - tab
-		//13 - enter
 		
 		if ( e.which === 40 && document.querySelectorAll('.selected').length === 0) {
 			document.querySelectorAll('.obj')[0].children[0].classList.add('selected')
@@ -170,6 +166,44 @@ function displayUI(theme, html) {
 					var collapsible = document.querySelectorAll('.selected > .hoverable > .collapsible')[0]
 					if ( typeof collapsible !== 'undefined' ) {
 						collapsible.parentNode.classList.add('collapsed');
+					}
+					var prop = document.querySelectorAll('.selected > .hoverable > .property')[0];
+
+					if ( prop && prop.innerHTML === 'href' ) {
+						var anchor = document.querySelectorAll('.selected > .hoverable > a')[0];
+						var linkFiller = document.querySelectorAll('.link-filler')[0]
+
+						if ( typeof linkFiller !== 'undefined' ) {
+							var editedHref = linkFiller.value;
+							anchor.href = editedHref;
+							anchor.innerText = editedHref;
+							return;
+						}
+						
+						var href = anchor.href;
+
+						href = decodeURIComponent( href );
+
+						if ( href.indexOf('{?') > -1 || href.indexOf('{&') > -1 ) {
+							var parts = href.match( /{([?,&])(.+)}/ );
+							if ( parts.length <= 1 ) {
+								return;
+							}
+
+							var qsType = parts[ 1 ];
+							var qsName = parts[ 2 ];
+
+							var newHref = href.replace( /{[?,&].+}/, qsType + qsName + '=' );
+							anchor.innerHTML = '<input class="link-filler" type="text" value="' + newHref + '" />';
+							document.querySelectorAll('.link-filler')[0].addEventListener('click', function(e) {
+								e.stopPropagation();
+								e.preventDefault();
+							});
+							document.querySelectorAll('.link-filler')[0].focus();
+							
+							return;
+						}
+						window.location = href;
 					}
 					return;
 				}

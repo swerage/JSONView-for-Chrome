@@ -129,3 +129,8 @@ li {
 .marked {
 	border: 1px dotted;
 }
+
+.link-filler {
+	width: 650px;
+	height: 25px;
+}
