@@ -106,54 +106,68 @@ function displayUI(theme, html) {
 		//9 - tab
 		//13 - enter
 		
-		if ( e.which === 40 && document.querySelectorAll('.marked').length === 0) {
-			document.querySelectorAll('.obj')[0].children[0].classList.add('marked')
+		if ( e.which === 40 && document.querySelectorAll('.selected').length === 0) {
+			document.querySelectorAll('.obj')[0].children[0].classList.add('selected')
 			return;
 		}
 
-		if ( document.querySelectorAll('.marked').length !== 0 ) {
+		if ( document.querySelectorAll('.selected').length !== 0 ) {
 			
 			//Down
 			if ( e.which === 40 ) {
-				var marked = document.querySelectorAll('.marked')[0];
-				var isCollapsed = document.querySelectorAll('.marked > .hoverable')[0].classList.contains('collapsed'); 
-				var firstChild = document.querySelectorAll('.marked > .hoverable > ul.collapsible > li')[0];
+				var selected = document.querySelectorAll('.selected')[0];
+				var isCollapsed = document.querySelectorAll('.selected > .hoverable')[0].classList.contains('collapsed'); 
+				var firstChild = document.querySelectorAll('.selected > .hoverable > ul.collapsible > li')[0];
 				
 				if ( !isCollapsed && typeof firstChild !== 'undefined' ) {
-					marked.classList.remove('marked');
-					firstChild.classList.add('marked');
+					selected.classList.remove('selected');
+					firstChild.classList.add('selected');
 					return;
 				}
 
-				var siblings = marked.parentNode.children; 
-				var current = Array.prototype.indexOf.call( siblings, marked );
+				var siblings = selected.parentNode.children; 
+				var current = Array.prototype.indexOf.call( siblings, selected );
 				var next = siblings[ current + 1 ];
 
 				if ( typeof next !== 'undefined' ) {
-					marked.classList.remove('marked');
-					next.classList.add('marked');
+					selected.classList.remove('selected');
+					next.classList.add('selected');
+					return;
+				}
+
+				var parent = selected.parentNode.parentNode.parentNode;
+				var siblings = parent.parentNode.children;
+				var ix = Array.prototype.indexOf.call( siblings, parent );
+
+				if ( ix > -1 && siblings.length > 1 ) {
+					selected.classList.remove('selected');
+					siblings[ ix + 1 ].classList.add('selected');
 				}
 			}
 
 			//Up
 			if ( e.which === 38 ) {
-				var marked = document.querySelectorAll('.marked')[0];
-				var siblings = marked.parentNode.children; 
-				var current = Array.prototype.indexOf.call( siblings, marked );
+				var selected = document.querySelectorAll('.selected')[0];
+				var siblings = selected.parentNode.children; 
+				var current = Array.prototype.indexOf.call( siblings, selected );
 				var prev = siblings[ current - 1 ];
 
 				if ( typeof prev !== 'undefined' ) {
-					marked.classList.remove('marked');
-					prev.classList.add('marked');
+					selected.classList.remove('selected');
+					prev.classList.add('selected');
+					return;
 				}
+
+				selected.classList.remove('selected');
+				selected.parentNode.parentNode.parentNode.classList.add('selected');
 			}
 
 			//Enter
 			if ( e.which === 13 ) {
-				var collapsed = document.querySelectorAll('.marked > .collapsed')[0];
+				var collapsed = document.querySelectorAll('.selected > .collapsed')[0];
 				
 				if ( typeof collapsed === 'undefined' ) {					
-					var collapsible = document.querySelectorAll('.marked > .hoverable > .collapsible')[0]
+					var collapsible = document.querySelectorAll('.selected > .hoverable > .collapsible')[0]
 					if ( typeof collapsible !== 'undefined' ) {
 						collapsible.parentNode.classList.add('collapsed');
 					}
